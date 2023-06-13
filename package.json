@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "koa-router": "^12.0.0"
+  }
+}
