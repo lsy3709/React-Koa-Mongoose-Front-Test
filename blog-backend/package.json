@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "dotenv": "^16.1.4",
     "eslint-config-prettier": "^8.8.0",

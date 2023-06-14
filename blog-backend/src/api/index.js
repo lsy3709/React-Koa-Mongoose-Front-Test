@@ -1,10 +1,9 @@
-const Router = require('koa-router');
-const api = new Router();
+import Router from 'koa-router';
+import posts from './posts/index.js';
 
-//순서1
-const posts = require('./posts');
+const api = new Router();
 //순서2
 api.use('/posts', posts.routes());
 
-//라우터 내보내기.
-module.exports = api;
+// module.exports = api;
+export default api;
