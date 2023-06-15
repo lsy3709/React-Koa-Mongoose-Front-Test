@@ -52,9 +52,46 @@ export const write = async (ctx) => {
 };
 
 export const list = async (ctx) => {
+  //query 문자열 -> 숫자 변환 필요.
+  // 값없으면 1을 기본.
+
+  // 2번 파라미터 10진법 의미
+  const page = parseInt(ctx.query.page || '1', 10);
+
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
+
   try {
-    const posts = await Post.find().sort({ _id: -1 }).limit(10).exec();
-    ctx.body = posts;
+    const posts = await Post.find()
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
+
+    //마지막 페이지번호 추가.
+    const postCount = await Post.countDocuments().exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+
+    // 200자이상 문자열 자르기.
+    // 방법1
+    // ctx.body = posts
+    //   .map((post) => post.toJSON())
+    //   .map((post) => ({
+    //     ...post,
+    //     body:
+    //       // 200자 이상 자르고 마지막에 ... 점개 표시해줌.
+    //       post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+    //   }));
+
+    //방법2
+    ctx.body = posts.map((post) => ({
+      ...post,
+      body:
+        post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+    }));
   } catch (e) {
     ctx.throw(500, e);
   }
