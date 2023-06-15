@@ -12,7 +12,8 @@ node_modules/
 
 # production
 
-.env
+/blog-backend/.env
+/blog-backend/.gitignore
 # misc
 .DS_Store
 .env.local
