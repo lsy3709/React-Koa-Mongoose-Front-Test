@@ -8,6 +8,7 @@
     "dotenv": "^16.1.4",
     "eslint-config-prettier": "^8.8.0",
     "esm": "^3.2.25",
+    "joi": "^17.9.2",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "mongoose": "^7.2.4"
