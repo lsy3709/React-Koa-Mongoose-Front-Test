@@ -42,6 +42,8 @@ export const write = async (ctx) => {
     title,
     body,
     tags,
+    // 포스트에 유저추가
+    user: ctx.state.user,
   });
   try {
     await post.save();
