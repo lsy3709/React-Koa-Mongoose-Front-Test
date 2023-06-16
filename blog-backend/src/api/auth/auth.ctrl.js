@@ -86,6 +86,9 @@ export const check = async (ctx) => {
   ctx.body = user;
   //로그인 상태 확인
 };
+
 export const logout = async (ctx) => {
+  ctx.cookies.set('access_token');
+  ctx.status = 204; // no content
   //로그아웃
 };
