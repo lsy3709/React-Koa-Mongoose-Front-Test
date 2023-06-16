@@ -86,8 +86,17 @@ export const list = async (ctx) => {
     return;
   }
 
+  //사용자, 태그로 필터링
+  const { tag, username } = ctx.query;
+  // 사용자, 태그 값이 유효시 객체에 넣기.
+  const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+
   try {
-    const posts = await Post.find()
+    //query 추가
+    const posts = await Post.find(query)
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
@@ -95,7 +104,8 @@ export const list = async (ctx) => {
       .exec();
 
     //마지막 페이지번호 추가.
-    const postCount = await Post.countDocuments().exec();
+    //query 추가
+    const postCount = await Post.countDocuments(query).exec();
     ctx.set('Last-Page', Math.ceil(postCount / 10));
 
     // 200자이상 문자열 자르기.
