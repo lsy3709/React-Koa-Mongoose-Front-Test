@@ -9,10 +9,12 @@ posts.post('/', checkLoggedIn, postsCtrl.write);
 
 const post = new Router(); // /api/posts/:id
 post.get('/', postsCtrl.read);
-post.delete('/', checkLoggedIn, postsCtrl.remove);
-post.patch('/', checkLoggedIn, postsCtrl.update);
+// 로그인 중인 사용자 작성한 포스트인지 확인. 적용.
+post.delete('/', checkLoggedIn, postsCtrl.checkOwnPost, postsCtrl.remove);
+post.patch('/', checkLoggedIn, postsCtrl.checkOwnPost, postsCtrl.update);
 
-posts.use('/:id', postsCtrl.checkObjectId, post.routes());
+//변경 .checkObjectId -> getPostById로 변경
+posts.use('/:id', postsCtrl.getPostById, post.routes());
 
 // module.exports = posts;
 export default posts;
