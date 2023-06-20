@@ -1,4 +1,4 @@
-import Editor from '../components/write/Editor';
+import EditorContainer from '../containers/write/EditorContainer';
 import Responsive from '../components/common/Responsive';
 import TagBox from '../components/write/TagBox';
 import WriteActionButtons from '../components/write/WriteActionButtons';
@@ -6,7 +6,7 @@ import WriteActionButtons from '../components/write/WriteActionButtons';
 const WritePage = () => {
   return (
     <Responsive>
-      <Editor />
+      <EditorContainer />
       <TagBox />
       <WriteActionButtons />
     </Responsive>
