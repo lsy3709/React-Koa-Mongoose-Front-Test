@@ -14,13 +14,14 @@ const App = () => {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/write" element={<WritePage />} />
       {/* 방법1 */}
-      <Route path="/@:username">
+      {/* <Route path="/@:username">
         <Route index element={<PostListPage />} />
         <Route path=":postId" element={<PostPage />} />
-      </Route>
+      </Route> */}
       {/* 방법2 */}
-      {/* <Route path="/@:username" element={<PostListPage />} />
-      <Route path="/@:username/:postId" element={<PostPage />} /> */}
+      {/* 기존 @:username 잘 안되어서 변경 */}
+      <Route path="/:username" element={<PostListPage />} />
+      <Route path="/:username/:postId" element={<PostPage />} />
     </Routes>
   );
 };
