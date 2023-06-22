@@ -24,7 +24,8 @@ const PostContent = styled.div`
   color: ${palette.gray[8]};
 `;
 //추가 ,
-const PostViewr = ({ post, error, loading }) => {
+//수정 , actionButtons 추가
+const PostViewr = ({ post, error, loading, actionButtons }) => {
   if (error) {
     if (error.response && error.response.status === 404) {
       return <PostViewerBlock>존재하지 않는 포스트입니다.</PostViewerBlock>;
@@ -48,6 +49,8 @@ const PostViewr = ({ post, error, loading }) => {
         />
         <Tags tags={tags} />
       </PostHead>
+      {/* 추가  */}
+      {actionButtons}
       <PostContent dangerouslySetInnerHTML={{ __html: body }} />
     </PostViewerBlock>
   );
