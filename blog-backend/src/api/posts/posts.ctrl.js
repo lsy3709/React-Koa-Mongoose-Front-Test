@@ -1,8 +1,36 @@
 import Post from '../../models/post.js';
 import mongoose from 'mongoose';
 import Joi from 'joi';
+//추가
+import sanitizeHtml from 'sanitize-html';
 
 const { ObjectId } = mongoose.Types;
+
+//HTML 허용할 태그 목록
+//추가
+const sanitizeOption = {
+  allowedTags: [
+    'h1',
+    'h2',
+    'b',
+    'i',
+    'u',
+    's',
+    'p',
+    'ul',
+    'ol',
+    'li',
+    'blockquote',
+    'a',
+    'img',
+  ],
+  allowedAttributes: {
+    a: ['href', 'name', 'target'],
+    img: ['src'],
+    li: ['class'],
+  },
+  allowedSchemes: ['data', 'http'],
+};
 
 // 로그인 중인 사용자가 작성한 포스트인지 확인.
 export const checkOwnPost = (ctx, next) => {
@@ -59,9 +87,11 @@ export const write = async (ctx) => {
   }
 
   const { title, body, tags } = ctx.request.body;
+
   const post = new Post({
     title,
-    body,
+    //수정
+    body: sanitizeHtml(body, sanitizeOption),
     tags,
     // 포스트에 유저추가
     user: ctx.state.user,
@@ -72,6 +102,13 @@ export const write = async (ctx) => {
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+// html 없애고 내용이 길면 200자 제한하는 함수
+const removeHtmlAndShorten = (body) => {
+  const filtered = sanitizeHtml(body, {
+    allowedTags: [],
+  });
+  return filtered.length < 200 ? filtered : `${filtered.slice(0, 200)}...`;
 };
 
 export const list = async (ctx) => {
@@ -123,7 +160,8 @@ export const list = async (ctx) => {
     ctx.body = posts.map((post) => ({
       ...post,
       body:
-        post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+        //추가 , 리팩토링
+        removeHtmlAndShorten(post.body),
     }));
   } catch (e) {
     ctx.throw(500, e);
@@ -172,8 +210,14 @@ export const update = async (ctx) => {
     return;
   }
 
+  //추가
+  const nextData = { ...ctx.request.body };
+  if (nextData.body) {
+    nextData.body = sanitizeHtml(nextData.body, sanitizeOption);
+  }
+
   try {
-    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+    const post = await Post.findByIdAndUpdate(id, nextData, {
       // 이 값이 설정해야 업데이트된 데이터를 반환.
       // false , 업데이트 전 데이터 반환.
       new: true,

@@ -72,11 +72,13 @@ const PostList = ({ posts, loading, error, showWriteButton }) => {
           </Button>
         )}
       </WritePostButtonWrapper>
-      <div>
-        {posts.map((post) => (
-          <PostItem post={post} key={post._id} />
-        ))}
-      </div>
+      {!loading && posts && (
+        <div>
+          {posts.map((post) => (
+            <PostItem post={post} key={post._id} />
+          ))}
+        </div>
+      )}
     </PostListBlock>
   );
 };
