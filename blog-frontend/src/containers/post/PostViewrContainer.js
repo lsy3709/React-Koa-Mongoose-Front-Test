@@ -36,6 +36,16 @@ const PostViewrContainer = () => {
     navigate('/write');
   };
 
+  //삭제
+  const onRemove = async () => {
+    try {
+      await removePost(postId);
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const ownPost = (user && user._id) === (post && post.user._id);
 
   //수정 추가
@@ -44,7 +54,9 @@ const PostViewrContainer = () => {
       post={post}
       loading={loading}
       error={error}
-      actionButtons={ownPost && <PostActionButtons onEdit={onEdit} />}
+      actionButtons={
+        ownPost && <PostActionButtons onEdit={onEdit} onRemove={onRemove} />
+      }
     />
   );
 };
